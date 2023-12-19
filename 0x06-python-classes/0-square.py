@@ -2,6 +2,6 @@
 
 """Square Module"""
 
-class square:
+class Square:
     """my first class"""
     pass

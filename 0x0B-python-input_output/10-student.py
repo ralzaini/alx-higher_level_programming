@@ -12,13 +12,13 @@ class Student:
 
     def to_json(self, attrs=None):
         """from class to json"""
-        try:
-            for attr in attrs:
-                return self.__dict__
-        except Exception:
+        if attrs is None:
             return self.__dict__
-        my_dict = {}
-        for key, value in self.__dict__.items():
-            if key in attrs:
-                my_dict[key] = value
-        return my_dict
+        all_str = all(isinstance(element, str) for element in attrs)
+        if not all_str:
+            return self.__dict__
+        dictionary = {}
+        for key in attrs:
+            if key in self.__dict__:
+                dictionary[key] = self.__dict__[key]
+        return dictionary

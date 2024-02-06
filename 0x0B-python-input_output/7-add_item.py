@@ -1,16 +1,17 @@
 #!/usr/bin/python3
 """task 7"""
 
+import json
 import sys
-save_to_json_file = __import__('5-save_to_json_file').save_to_json_file
-load_from_json_file = __import__('6-load_from_json_file').load_from_json_file
+import os.path
 
-a_list = list(sys.argv[1:])
+save_to_json_file = __import__('7-save_to_json_file').save_to_json_file
+load_from_json_file = __import__('8-load_from_json_file').load_from_json_file
 
-try:
-    old_data = load_from_json_file('add_ietm.json')
-except Exception:
-    old_data = []
-
-old_data.extend(a_list)
-save_to_json_file(old_data, 'add_item.json')
+filename = "add_item.json"
+if os.path.isfile(filename):
+    obj = load_from_json_file(filename)
+else:
+    obj = []
+obj.extend(sys.argv[1:])
+save_to_json_file(obj, filename)

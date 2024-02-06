@@ -1,5 +1,7 @@
 #!/usr/bin/python3
-"""task 7"""
+"""
+Script that adds all arguments to a Python list, and then saves them to a file
+"""
 
 from sys import argv
 from os.path import isfile

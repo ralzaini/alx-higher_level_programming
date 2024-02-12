@@ -16,7 +16,6 @@ class Base:
 
     __nb_objects = 0
 
-
     def __init__(self, id=None):
         """base function"""
         if id is None:

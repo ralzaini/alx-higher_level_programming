@@ -35,9 +35,9 @@ class Square(Rectangle):
                     self.id = value
                 if i == 1:
                     self.size = value
-                if i == 3:
+                if i == 2:
                     self.x = value
-                if i == 4:
+                if i == 3:
                     self.y = value
         else:
             for key, value in kwargs.items():

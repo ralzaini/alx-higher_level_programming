@@ -130,6 +130,26 @@ class TestRectangleValidValues(unittest.TestCase):
         r3 = Rectangle(1, 1, 100, 0)
         r4 = Rectangle(1, 1, 0, 0)
 
+        self.assertEqual(r1.width,  12)
+        self.assertEqual(r1.height,  54)
+        self.assertEqual(r1.x,  1)
+        self.assertEqual(r1.y,  2)
+
+        self.assertEqual(r2.width,  54)
+        self.assertEqual(r2.height,  1222222)
+        self.assertEqual(r2.x,  0)
+        self.assertEqual(r2.y,  2)
+
+        self.assertEqual(r3.width,  1)
+        self.assertEqual(r3.height,  1)
+        self.assertEqual(r3.x,  100)
+        self.assertEqual(r3.y,  0)
+
+        self.assertEqual(r4.width,  1)
+        self.assertEqual(r4.height,  1)
+        self.assertEqual(r4.x,  0)
+        self.assertEqual(r4.y,  0)
+
     def test_x_y_invalid_values_types(self):
         """
         test with valid height and width

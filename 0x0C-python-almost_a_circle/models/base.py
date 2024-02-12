@@ -29,7 +29,9 @@ class Base:
         """Convert a list of dictionaries to a JSON string."""
         if list_dictionaries is None or len(list_dictionaries) == 0:
             return "[]"
-        return json.dumps(list_dictionaries)
+        else:
+            sorted_list = [{k: d[k] for k in sorted(d)} for d in list_dictionaries]
+            return json.dumps(sorted_list)
 
     @classmethod
     def save_to_file(cls, list_objs):

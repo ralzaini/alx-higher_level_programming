@@ -16,6 +16,11 @@ class Base:
 
     __nb_objects = 0
 
+    @classmethod
+    def set_nb_objects(cls):
+        """Increment the number of objects."""
+        cls.__nb_objects +=  1
+
     def __init__(self, id=None):
         """base function"""
         if id is None:

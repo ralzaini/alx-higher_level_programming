@@ -28,7 +28,7 @@ class TestRectangleValidValues(unittest.TestCase):
 
         r1 = Rectangle(10, 2)
         r2 = Rectangle(2, 10)
-        self.assertEqual(r1.id +  1, r2.id)
+        self.assertEqual(r1.id + 1, r2.id)
 
     def test_id_three_classes(self):
         """
@@ -38,8 +38,8 @@ class TestRectangleValidValues(unittest.TestCase):
         r1 = Rectangle(4, 15)
         r2 = Rectangle(12, 65)
         r3 = Rectangle(12, 87)
-        self.assertEqual(r1.id +  1, r2.id)
-        self.assertEqual(r1.id +  2, r3.id)
+        self.assertEqual(r1.id + 1, r2.id)
+        self.assertEqual(r1.id + 2, r3.id)
 
     def test_id_provided(self):
         """

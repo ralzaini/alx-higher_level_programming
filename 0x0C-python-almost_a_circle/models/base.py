@@ -16,10 +16,6 @@ class Base:
 
     __nb_objects = 0
 
-    @classmethod
-    def set_nb_objects(cls):
-        """Increment the number of objects."""
-        cls.__nb_objects +=  1
 
     def __init__(self, id=None):
         """base function"""
@@ -28,6 +24,11 @@ class Base:
             self.id = Base.__nb_objects
         else:
             self.id = id
+
+    @classmethod
+    def set_nb_objects(cls):
+        """Class method to set the value of nb_objest to zero"""
+        Base.__nb_objects = 0
 
     @staticmethod
     def to_json_string(list_dictionaries):

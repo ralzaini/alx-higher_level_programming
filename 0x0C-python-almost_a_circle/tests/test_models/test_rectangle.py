@@ -156,40 +156,40 @@ class TestRectangleValidValues(unittest.TestCase):
         valid values
         """
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 54, "0", 23)
+            r1 = Rectangle(1, 54, "0", 23)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, [1, 2, 3], 1222222)
+            r1 = Rectangle(1, 2, [1, 2, 3], 1222222)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, {"age": 23}, 54)
+            r1 = Rectangle(1, 2, {"age": 23}, 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23.25, 54)
+            r1 = Rectangle(1, 2, 23.25, 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, (1, 2, 3), 54)
+            r1 = Rectangle(1, 2, (1, 2, 3), 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 54, "54")
+            r1 = Rectangle(1, 2, 54, "54")  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 25, [1, 2, 3])
+            r1 = Rectangle(1, 2, 25, [1, 2, 3])  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23, {"age": 23})
+            r1 = Rectangle(1, 2, 23, {"age": 23})  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23, 54.5)
+            r1 = Rectangle(1, 2, 23, 54.5)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 25, (1, 2, 3))
+            r1 = Rectangle(1, 2, 25, (1, 2, 3))  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(1, 2, -10, 23)
+            r1 = Rectangle(1, 2, -10, 23)  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(1, 2, 23, -10)
+            r1 = Rectangle(1, 2, 23, -10)  # noqa: F841
 
     def test_area(self):
         """Test the area values"""

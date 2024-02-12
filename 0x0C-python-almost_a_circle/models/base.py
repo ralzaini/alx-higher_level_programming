@@ -30,8 +30,8 @@ class Base:
         if list_dictionaries is None or len(list_dictionaries) == 0:
             return "[]"
         else:
-            sorted_list = [{k: d[k] for k in sorted(d)} for d in list_dictionaries]
-            return json.dumps(sorted_list)
+            s_list = [{k: d[k] for k in sorted(d)} for d in list_dictionaries]
+            return json.dumps(s_list)
 
     @classmethod
     def save_to_file(cls, list_objs):

@@ -33,7 +33,7 @@ class Base:
     @staticmethod
     def to_json_string(list_dictionaries):
         """Convert a list of dictionaries to a JSON string."""
-        if list_dictionaries is None or len(list_dictionaries) == 0:
+        if list_dictionaries is None or len(list_dictionaries) ==  0:
             return "[]"
         else:
             s_list = [{k: d[k] for k in sorted(d)} for d in list_dictionaries]

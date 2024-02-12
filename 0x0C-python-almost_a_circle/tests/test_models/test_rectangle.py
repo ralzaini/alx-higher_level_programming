@@ -1,364 +1,595 @@
 #!/usr/bin/python3
-"""
-Testing module for the calsses  Rectangles
-In this module we will test all the available Functionalities
-and Comme up with adequate testes
-"""
+'''Module for Rectangle unit tests.'''
 import unittest
-import sys
-from io import StringIO
+from models.base import Base
 from models.rectangle import Rectangle
+from random import randrange
+from contextlib import redirect_stdout
+import io
 
 
-class TestRectangleValidValues(unittest.TestCase):
-    """
-    TestRectanleIdValidValues is a class that test
-    id valid values and make sure that we get
-    good information out of it
-    """
+class TestRectangle(unittest.TestCase):
+    '''Tests the Base class.'''
 
     def setUp(self):
-        """Set up the start of objects"""
-        Rectangle.set_nb_objects()
+        '''Imports module, instantiates class'''
+        Base._Base__nb_objects = 0
 
-    def test_id_two_classes(self):
-        """
-        test the value of one class id
-        """
+    def tearDown(self):
+        '''Cleans up after each test_method.'''
+        pass
 
-        r1 = Rectangle(10, 2)
-        r2 = Rectangle(2, 10)
-        self.assertEqual(r1.id, r2.id - 1)
+    # ----------------- Tests for #2 ------------------------
 
-    def test_id_three_classes(self):
-        """
-        test the output of three classes
-        """
+    def test_A_class(self):
+        '''Tests Rectangle class type.'''
+        self.assertEqual(str(Rectangle),
+                         "<class 'models.rectangle.Rectangle'>")
 
-        r1 = Rectangle(4, 15)
-        r2 = Rectangle(12, 65)
-        r3 = Rectangle(12, 87)
-        self.assertEqual(r1.id, r2.id - 1)
-        self.assertEqual(r1.id, r3.id - 2)
+    def test_B_inheritance(self):
+        '''Tests if Rectangle inherits Base.'''
+        self.assertTrue(issubclass(Rectangle, Base))
 
-    def test_id_provided(self):
-        """
-        test with provided id in
-        the object creation
-        """
+    def test_C_constructor_no_args(self):
+        '''Tests constructor signature.'''
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle()
+        s = "__init__() missing 2 required positional arguments: 'width' \
+and 'height'"
+        self.assertEqual(str(e.exception), s)
 
-        r1 = Rectangle(12, 54, 12, 54, 12)
-        r2 = Rectangle(8, 78, 12, 54, -12)
-        r3 = Rectangle(9, 45, 15, 23, -15)
-        r4 = Rectangle(5, 12)
-        self.assertEqual(r1.id, 12)
-        self.assertEqual(r2.id, -12)
-        self.assertEqual(r3.id, -15)
-        self.assertEqual(r4.id, 1)
+    def test_C_constructor_many_args(self):
+        '''Tests constructor signature.'''
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle(1, 2, 3, 4, 5, 6)
+        s = "__init__() takes from 3 to 6 positional arguments but 7 were \
+given"
+        self.assertEqual(str(e.exception), s)
 
-    def test_height_width_valid_values_types(self):
-        """
-        test with valid height and width
-        valid values
-        """
+    def test_C_constructor_one_args(self):
+        '''Tests constructor signature.'''
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle(1)
+        s = "__init__() missing 1 required positional argument: 'height'"
+        self.assertEqual(str(e.exception), s)
 
-        r1 = Rectangle(12, 54)
-        r2 = Rectangle(54, 1222222)
-        r3 = Rectangle(1, 1)
-        self.assertEqual(r1.height, 54)
-        self.assertEqual(r2.height, 1222222)
-        self.assertEqual(r3.height, 1)
-        self.assertEqual(r1.width, 12)
-        self.assertEqual(r2.width, 54)
-        self.assertEqual(r3.width, 1)
+    def test_D_instantiation(self):
+        '''Tests instantiation.'''
+        r = Rectangle(10, 20)
+        self.assertEqual(str(type(r)), "<class 'models.rectangle.Rectangle'>")
+        self.assertTrue(isinstance(r, Base))
+        d = {'_Rectangle__height': 20, '_Rectangle__width': 10,
+             '_Rectangle__x': 0, '_Rectangle__y': 0, 'id': 1}
+        self.assertDictEqual(r.__dict__, d)
 
-    def test_height_width_invalid_values_types(self):
-        """
-        test with valid height and width
-        valid values
-        """
-        with self.assertRaises(TypeError):
-            r1 = Rectangle("0", 54)
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle("1", 2)
+        msg = "width must be an integer"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle([1, 2, 3], 1222222)
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle(1, "2")
+        msg = "height must be an integer"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle({"age": 23}, 54)
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle(1, 2, "3")
+        msg = "x must be an integer"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(23.25, 54)
+        with self.assertRaises(TypeError) as e:
+            r = Rectangle(1, 2, 3, "4")
+        msg = "y must be an integer"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle((1, 2, 3), 54)
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(-1, 2)
+        msg = "width must be > 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(54, "54")
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(1, -2)
+        msg = "height must be > 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(25, [1, 2, 3])
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(0, 2)
+        msg = "width must be > 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(23, {"age": 23})
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(1, 0)
+        msg = "height must be > 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(23, 54.5)
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(1, 2, -3)
+        msg = "x must be >= 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(25, (1, 2, 3))
+        with self.assertRaises(ValueError) as e:
+            r = Rectangle(1, 2, 3, -4)
+        msg = "y must be >= 0"
+        self.assertEqual(str(e.exception), msg)
 
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(0, 23)
+    def test_D_instantiation_positional(self):
+        '''Tests positional instantiation.'''
+        r = Rectangle(5, 10, 15, 20)
+        d = {'_Rectangle__height': 10, '_Rectangle__width': 5,
+             '_Rectangle__x': 15, '_Rectangle__y': 20, 'id': 1}
+        self.assertEqual(r.__dict__, d)
 
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(23, 0)
+        r = Rectangle(5, 10, 15, 20, 98)
+        d = {'_Rectangle__height': 10, '_Rectangle__width': 5,
+             '_Rectangle__x': 15, '_Rectangle__y': 20, 'id': 98}
+        self.assertEqual(r.__dict__, d)
 
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(-10, 23)
+    def test_D_instantiation_keyword(self):
+        '''Tests positional instantiation.'''
+        r = Rectangle(100, 200, id=421, y=99, x=101)
+        d = {'_Rectangle__height': 200, '_Rectangle__width': 100,
+             '_Rectangle__x': 101, '_Rectangle__y': 99, 'id': 421}
+        self.assertEqual(r.__dict__, d)
 
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(23, -10)
+    def test_E_id_inherited(self):
+        '''Tests if id is inherited from Base.'''
+        Base._Base__nb_objects = 98
+        r = Rectangle(2, 4)
+        self.assertEqual(r.id, 99)
 
-    def test_x_y_valid_values_types(self):
-        """
-        test with valid height and width
-        valid values
-        """
+    def test_F_properties(self):
+        '''Tests property getters/setters.'''
+        r = Rectangle(5, 9)
+        r.width = 100
+        r.height = 101
+        r.x = 102
+        r.y = 103
+        d = {'_Rectangle__height': 101, '_Rectangle__width': 100,
+             '_Rectangle__x': 102, '_Rectangle__y': 103, 'id': 1}
+        self.assertEqual(r.__dict__, d)
+        self.assertEqual(r.width, 100)
+        self.assertEqual(r.height, 101)
+        self.assertEqual(r.x, 102)
+        self.assertEqual(r.y, 103)
 
-        r1 = Rectangle(12, 54, 1, 2)
-        r2 = Rectangle(54, 1222222, 0, 2)
-        r3 = Rectangle(1, 1, 100, 0)
-        r4 = Rectangle(1, 1, 0, 0)
+    # ----------------- Tests for #3 ------------------------
 
-    def test_x_y_invalid_values_types(self):
-        """
-        test with valid height and width
-        valid values
-        """
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 54, "0", 23)
+    def invalid_types(self):
+        '''Returns tuple of types for validation.'''
+        t = (3.14, -1.1, float('inf'), float('-inf'), True, "str", (2,),
+             [4], {5}, {6: 7}, None)
+        return t
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, [1, 2, 3], 1222222)
+    def test_G_validate_type(self):
+        '''Tests property validation.'''
+        r = Rectangle(1, 2)
+        attributes = ["x", "y", "width", "height"]
+        for attribute in attributes:
+            s = "{} must be an integer".format(attribute)
+            for invalid_type in self.invalid_types():
+                with self.assertRaises(TypeError) as e:
+                    setattr(r, attribute, invalid_type)
+                self.assertEqual(str(e.exception), s)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, {"age": 23}, 54)
+    def test_G_validate_value_negative_gt(self):
+        '''Tests property validation.'''
+        r = Rectangle(1, 2)
+        attributes = ["width", "height"]
+        for attribute in attributes:
+            s = "{} must be > 0".format(attribute)
+            with self.assertRaises(ValueError) as e:
+                setattr(r, attribute, -(randrange(10) + 1))
+            self.assertEqual(str(e.exception), s)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23.25, 54)
+    def test_G_validate_value_negative_ge(self):
+        '''Tests property validation.'''
+        r = Rectangle(1, 2)
+        attributes = ["x", "y"]
+        for attribute in attributes:
+            s = "{} must be >= 0".format(attribute)
+            with self.assertRaises(ValueError) as e:
+                setattr(r, attribute, -(randrange(10) + 1))
+            self.assertEqual(str(e.exception), s)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, (1, 2, 3), 54)
+    def test_G_validate_value_zero(self):
+        '''Tests property validation.'''
+        r = Rectangle(1, 2)
+        attributes = ["width", "height"]
+        for attribute in attributes:
+            s = "{} must be > 0".format(attribute)
+            with self.assertRaises(ValueError) as e:
+                setattr(r, attribute, 0)
+            self.assertEqual(str(e.exception), s)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 54, "54")
+    def test_H_property(self):
+        '''Tests property setting/getting.'''
+        r = Rectangle(1, 2)
+        attributes = ["x", "y", "width", "height"]
+        for attribute in attributes:
+            n = randrange(10) + 1
+            setattr(r, attribute, n)
+            self.assertEqual(getattr(r, attribute), n)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 25, [1, 2, 3])
+    def test_H_property_range_zero(self):
+        '''Tests property setting/getting.'''
+        r = Rectangle(1, 2)
+        r.x = 0
+        r.y = 0
+        self.assertEqual(r.x, 0)
+        self.assertEqual(r.y, 0)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23, {"age": 23})
+    # ----------------- Tests for #4 ------------------------
+    def test_I_area_no_args(self):
+        '''Tests area() method signature.'''
+        r = Rectangle(5, 6)
+        with self.assertRaises(TypeError) as e:
+            Rectangle.area()
+        s = "area() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), s)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 23, 54.5)
+    def test_I_area(self):
+        '''Tests area() method compuation.'''
+        r = Rectangle(5, 6)
+        self.assertEqual(r.area(), 30)
+        w = randrange(10) + 1
+        h = randrange(10) + 1
+        r.width = w
+        r.height = h
+        self.assertEqual(r.area(), w * h)
+        w = randrange(10) + 1
+        h = randrange(10) + 1
+        r = Rectangle(w, h, 7, 8, 9)
+        self.assertEqual(r.area(), w * h)
+        w = randrange(10) + 1
+        h = randrange(10) + 1
+        r = Rectangle(w, h, y=7, x=8, id=9)
+        self.assertEqual(r.area(), w * h)
 
-        with self.assertRaises(TypeError):
-            r1 = Rectangle(1, 2, 25, (1, 2, 3))
-
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(1, 2, -10, 23)
-
-        with self.assertRaises(ValueError):
-            r1 = Rectangle(1, 2, 23, -10)
-
-    def test_area(self):
-        """Test the area values"""
         r1 = Rectangle(3, 2)
         self.assertEqual(r1.area(), 6)
-        r1 = Rectangle(2, 10)
-        self.assertEqual(r1.area(), 20)
-        r1 = Rectangle(8, 7, 0, 0, 12)
-        self.assertEqual(r1.area(), 56)
 
-    def test_diplay_without_x_y(self):
-        """Display the rectangle without offset"""
-        expected_output = "####\n" \
-                          "####\n" \
-                          "####\n" \
-                          "####\n" \
-                          "####\n" \
-                          "####\n"
-        capture_output = StringIO()
-        sys.stdout = capture_output
-        r1 = Rectangle(4, 6)
-        r1.display()
-        sys.stdout = sys.__stdout__
-        actual_output = capture_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        capture_output.seek(0)
-        capture_output.truncate(0)
-        expected_output = "##\n" \
-                          "##\n"
-        sys.stdout = capture_output
-        r1 = Rectangle(2, 2)
-        r1.display()
-        sys.stdout = sys.__stdout__
-        actual_output = capture_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
+        r2 = Rectangle(2, 10)
+        self.assertEqual(r2.area(), 20)
 
-    def test_display_with_x_y(self):
-        """Display the rectangle with offset"""
-        expected_output = "\n" \
-                          "\n" \
-                          "  ##\n" \
-                          "  ##\n" \
-                          "  ##\n"
-        captured_output = StringIO()
-        sys.stdout = captured_output
-        r1 = Rectangle(2, 3, 2, 2)
-        r1.display()
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "\n" \
-                          "   ####\n" \
-                          "   ####\n"
-        sys.stdout = captured_output
-        r1 = Rectangle(4, 2, 3, 1)
-        r1.display()
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
+        r3 = Rectangle(8, 7, 0, 0, 12)
+        self.assertEqual(r3.area(), 56)
 
-    def test_str(self):
-        """Test str print"""
-        r = Rectangle(1, 2, 3, 4)
-        expected_output = "[Rectangle] (1) 3/4 - 1/2"
-        captured_output = StringIO()
-        sys.stdout = captured_output
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        r = Rectangle(1, 2, 0, 0, 12)
-        expected_output = "[Rectangle] (12) 0/0 - 1/2"
-        sys.stdout = captured_output
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
+    # ----------------- Tests for #5 & #7 ------------------------
+    def test_J_display_no_args(self):
+        '''Tests display() method signature.'''
+        r = Rectangle(9, 8)
+        with self.assertRaises(TypeError) as e:
+            Rectangle.display()
+        s = "display() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), s)
 
-    def test_update(self):
-        """Test update function"""
-        r = Rectangle(10, 10, 10, 10)
-        expected_output = "[Rectangle] (1) 10/10 - 10/10"
-        captured_output = StringIO()
-        sys.stdout = captured_output
+    def test_J_display_simple(self):
+        '''Tests display() method output.'''
+        r = Rectangle(1, 1)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = "#\n"
+        self.assertEqual(f.getvalue(), s)
+        r.width = 3
+        r.height = 5
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = "\
+###\n\
+###\n\
+###\n\
+###\n\
+###\n\
+"
+        self.assertEqual(f.getvalue(), s)
+        r = Rectangle(5, 6, 7, 8)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """
+
+
+
+
+
+
+
+       #####
+       #####
+       #####
+       #####
+       #####
+       #####
+"""
+        self.assertEqual(f.getvalue(), s)
+        r = Rectangle(9, 8)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """\
+#########
+#########
+#########
+#########
+#########
+#########
+#########
+#########
+"""
+        self.assertEqual(f.getvalue(), s)
+        r = Rectangle(1, 1, 10, 10)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """\
+
+
+
+
+
+
+
+
+
+
+          #
+"""
+        self.assertEqual(f.getvalue(), s)
+
+        r = Rectangle(5, 5)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """\
+#####
+#####
+#####
+#####
+#####
+"""
+        self.assertEqual(f.getvalue(), s)
+
+        r = Rectangle(5, 3, 5)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """\
+     #####
+     #####
+     #####
+"""
+        self.assertEqual(f.getvalue(), s)
+
+        r = Rectangle(5, 3, 0, 4)
+        f = io.StringIO()
+        with redirect_stdout(f):
+            r.display()
+        s = """\
+
+
+
+
+#####
+#####
+#####
+"""
+        self.assertEqual(f.getvalue(), s)
+
+        # ----------------- Tests for #6 ------------------------
+
+    def test_K_str_no_args(self):
+        '''Tests __str__() method signature.'''
+        r = Rectangle(5, 2)
+        with self.assertRaises(TypeError) as e:
+            Rectangle.__str__()
+        s = "__str__() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), s)
+
+    def test_K_str(self):
+        '''Tests __str__() method return.'''
+        r = Rectangle(5, 2)
+        s = '[Rectangle] (1) 0/0 - 5/2'
+        self.assertEqual(str(r), s)
+        r = Rectangle(1, 1, 1)
+        s = '[Rectangle] (2) 1/0 - 1/1'
+        self.assertEqual(str(r), s)
+        r = Rectangle(3, 4, 5, 6)
+        s = '[Rectangle] (3) 5/6 - 3/4'
+        self.assertEqual(str(r), s)
+
+        Base._Base__nb_objects = 0
+        r1 = Rectangle(4, 6, 2, 1, 12)
+        self.assertEqual(str(r1), "[Rectangle] (12) 2/1 - 4/6")
+
+        r2 = Rectangle(5, 5, 1)
+        self.assertEqual(str(r2), "[Rectangle] (1) 1/0 - 5/5")
+
+        # ----------------- Tests for #8 & #9 ------------------------
+    def test_L_update_no_args(self):
+        '''Tests update() method signature.'''
+        r = Rectangle(5, 2)
+        with self.assertRaises(TypeError) as e:
+            Rectangle.update()
+        s = "update() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), s)
+
+        d = r.__dict__.copy()
         r.update()
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "[Rectangle] (89) 10/10 - 10/10"
-        sys.stdout = captured_output
-        r.update(89)
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "[Rectangle] (89) 10/10 - 2/10"
-        sys.stdout = captured_output
-        r.update(89, 2)
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "[Rectangle] (89) 10/10 - 2/3"
-        sys.stdout = captured_output
-        r.update(89, 2, 3)
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "[Rectangle] (89) 4/10 - 2/3"
-        sys.stdout = captured_output
-        r.update(89, 2, 3, 4)
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
-        captured_output.seek(0)
-        captured_output.truncate(0)
-        expected_output = "[Rectangle] (89) 4/5 - 2/3"
-        sys.stdout = captured_output
-        r.update(89, 2, 3, 4, 5)
-        print(r, end="")
-        sys.stdout = sys.__stdout__
-        actual_output = captured_output.getvalue()
-        self.assertEqual(actual_output, expected_output)
+        self.assertEqual(r.__dict__, d)
 
-    def test_to_dictinary(self):
-        """Test the Method to dictionary"""
-        r = Rectangle(10, 2, 1, 9)
-        r_dict = r.to_dictionary()
-        for key, value in r_dict.items():
-            if key == "id":
-                self.assertEqual(r.id, value)
-            elif key == "width":
-                self.assertEqual(r.width, value)
-            elif key == "height":
-                self.assertEqual(r.height, value)
-            elif key == "x":
-                self.assertEqual(r.x, value)
-            elif key == "y":
-                self.assertEqual(r.y, value)
-        self.assertEqual(len(set(r_dict.keys())), 5)
-        self.assertTrue(isinstance(r_dict, dict))
+    def test_L_update_args(self):
+        '''Tests update() postional args.'''
+        r = Rectangle(5, 2)
+        d = r.__dict__.copy()
 
-        r = Rectangle(10, 2)
-        r_dict = r.to_dictionary()
-        for key, value in r_dict.items():
-            if key == "id":
-                self.assertEqual(r.id, value)
-            elif key == "width":
-                self.assertEqual(r.width, value)
-            elif key == "height":
-                self.assertEqual(r.height, value)
-            elif key == "x":
-                self.assertEqual(r.x, value)
-            elif key == "y":
-                self.assertEqual(r.y, value)
-        self.assertEqual(len(set(r_dict.keys())), 5)
-        self.assertTrue(isinstance(r_dict, dict))
+        r.update(10)
+        d["id"] = 10
+        self.assertEqual(r.__dict__, d)
 
-        r = Rectangle(10, 2, 1, 9, 12)
-        r_dict = r.to_dictionary()
-        for key, value in r_dict.items():
-            if key == "id":
-                self.assertEqual(r.id, value)
-            elif key == "width":
-                self.assertEqual(r.width, value)
-            elif key == "height":
-                self.assertEqual(r.height, value)
-            elif key == "x":
-                self.assertEqual(r.x, value)
-            elif key == "y":
-                self.assertEqual(r.y, value)
-        self.assertEqual(len(set(r_dict.keys())), 5)
-        self.assertTrue(isinstance(r_dict, dict))
+        r.update(10, 5)
+        d["_Rectangle__width"] = 5
+        self.assertEqual(r.__dict__, d)
 
+        r.update(10, 5, 17)
+        d["_Rectangle__height"] = 17
+        self.assertEqual(r.__dict__, d)
 
-if __name__ == '__main__':
+        r.update(10, 5, 17, 20)
+        d["_Rectangle__x"] = 20
+        self.assertEqual(r.__dict__, d)
+
+        r.update(10, 5, 17, 20, 25)
+        d["_Rectangle__y"] = 25
+        self.assertEqual(r.__dict__, d)
+
+    def test_L_update_args_bad(self):
+        '''Tests update() positional arg fubars.'''
+        r = Rectangle(5, 2)
+        d = r.__dict__.copy()
+
+        r.update(10)
+        d["id"] = 10
+        self.assertEqual(r.__dict__, d)
+
+        with self.assertRaises(ValueError) as e:
+            r.update(10, -5)
+        s = "width must be > 0"
+        self.assertEqual(str(e.exception), s)
+
+        with self.assertRaises(ValueError) as e:
+            r.update(10, 5, -17)
+        s = "height must be > 0"
+        self.assertEqual(str(e.exception), s)
+
+        with self.assertRaises(ValueError) as e:
+            r.update(10, 5, 17, -20)
+        s = "x must be >= 0"
+        self.assertEqual(str(e.exception), s)
+
+        with self.assertRaises(ValueError) as e:
+            r.update(10, 5, 17, 20, -25)
+        s = "y must be >= 0"
+        self.assertEqual(str(e.exception), s)
+
+    def test_L_update_kwargs(self):
+        '''Tests update() keyword args.'''
+        r = Rectangle(5, 2)
+        d = r.__dict__.copy()
+
+        r.update(id=10)
+        d["id"] = 10
+        self.assertEqual(r.__dict__, d)
+
+        r.update(width=5)
+        d["_Rectangle__width"] = 5
+        self.assertEqual(r.__dict__, d)
+
+        r.update(height=17)
+        d["_Rectangle__height"] = 17
+        self.assertEqual(r.__dict__, d)
+
+        r.update(x=20)
+        d["_Rectangle__x"] = 20
+        self.assertEqual(r.__dict__, d)
+
+        r.update(y=25)
+        d["_Rectangle__y"] = 25
+        self.assertEqual(r.__dict__, d)
+
+    def test_L_update_kwargs_2(self):
+        '''Tests update() keyword args.'''
+        r = Rectangle(5, 2)
+        d = r.__dict__.copy()
+
+        r.update(id=10)
+        d["id"] = 10
+        self.assertEqual(r.__dict__, d)
+
+        r.update(id=10, width=5)
+        d["_Rectangle__width"] = 5
+        self.assertEqual(r.__dict__, d)
+
+        r.update(id=10, width=5, height=17)
+        d["_Rectangle__height"] = 17
+        self.assertEqual(r.__dict__, d)
+
+        r.update(id=10, width=5, height=17, x=20)
+        d["_Rectangle__x"] = 20
+        self.assertEqual(r.__dict__, d)
+
+        r.update(id=10, width=5, height=17, x=20, y=25)
+        d["_Rectangle__y"] = 25
+        self.assertEqual(r.__dict__, d)
+
+        r.update(y=25, id=10, height=17, x=20, width=5)
+        self.assertEqual(r.__dict__, d)
+
+        Base._Base__nb_objects = 0
+        r1 = Rectangle(10, 10, 10, 10)
+        self.assertEqual(str(r1), "[Rectangle] (1) 10/10 - 10/10")
+
+        r1.update(height=1)
+        self.assertEqual(str(r1), "[Rectangle] (1) 10/10 - 10/1")
+
+        r1.update(width=1, x=2)
+        self.assertEqual(str(r1), "[Rectangle] (1) 2/10 - 1/1")
+
+        r1.update(y=1, width=2, x=3, id=89)
+        self.assertEqual(str(r1), "[Rectangle] (89) 3/1 - 2/1")
+
+        r1.update(x=1, height=2, y=3, width=4)
+        self.assertEqual(str(r1), "[Rectangle] (89) 1/3 - 4/2")
+
+        Base._Base__nb_objects = 0
+        r1 = Rectangle(10, 10, 10, 10)
+        self.assertEqual(str(r1), "[Rectangle] (1) 10/10 - 10/10")
+
+        r1.update(89)
+        self.assertEqual(str(r1), "[Rectangle] (89) 10/10 - 10/10")
+
+        r1.update(89, 2)
+        self.assertEqual(str(r1), "[Rectangle] (89) 10/10 - 2/10")
+
+        r1.update(89, 2, 3)
+        self.assertEqual(str(r1), "[Rectangle] (89) 10/10 - 2/3")
+
+        r1.update(89, 2, 3, 4)
+        self.assertEqual(str(r1), "[Rectangle] (89) 4/10 - 2/3")
+
+        r1.update(89, 2, 3, 4, 5)
+        self.assertEqual(str(r1), "[Rectangle] (89) 4/5 - 2/3")
+
+    # ----------------- Tests for #13 ------------------------
+    def test_M_to_dictionary(self):
+        '''Tests to_dictionary() signature:'''
+        with self.assertRaises(TypeError) as e:
+            Rectangle.to_dictionary()
+        s = "to_dictionary() missing 1 required positional argument: 'self'"
+        self.assertEqual(str(e.exception), s)
+
+        r = Rectangle(1, 2)
+        d = {'x': 0, 'y': 0, 'width': 1, 'id': 1, 'height': 2}
+        self.assertEqual(r.to_dictionary(), d)
+
+        r = Rectangle(1, 2, 3, 4, 5)
+        d = {'x': 3, 'y': 4, 'width': 1, 'id': 5, 'height': 2}
+        self.assertEqual(r.to_dictionary(), d)
+
+        r.x = 10
+        r.y = 20
+        r.width = 30
+        r.height = 40
+        d = {'x': 10, 'y': 20, 'width': 30, 'id': 5, 'height': 40}
+        self.assertEqual(r.to_dictionary(), d)
+
+        r1 = Rectangle(10, 2, 1, 9)
+        r1_dictionary = r1.to_dictionary()
+        r2 = Rectangle(1, 1)
+        r2.update(**r1_dictionary)
+        self.assertEqual(str(r1), str(r2))
+        self.assertNotEqual(r1, r2)
+
+if __name__ == "__main__":
     unittest.main()

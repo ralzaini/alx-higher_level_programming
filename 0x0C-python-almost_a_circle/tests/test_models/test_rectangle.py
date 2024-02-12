@@ -78,46 +78,46 @@ class TestRectangleValidValues(unittest.TestCase):
         valid values
         """
         with self.assertRaises(TypeError):
-            r1 = Rectangle("0", 54) # noqa: F841
+            r1 = Rectangle("0", 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle([1, 2, 3], 1222222)
+            r1 = Rectangle([1, 2, 3], 1222222)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle({"age": 23}, 54) # noqa: F841
+            r1 = Rectangle({"age": 23}, 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(23.25, 54) # noqa: F841
+            r1 = Rectangle(23.25, 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle((1, 2, 3), 54) # noqa: F841
+            r1 = Rectangle((1, 2, 3), 54)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(54, "54") # noqa: F841
+            r1 = Rectangle(54, "54")  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(25, [1, 2, 3]) # noqa: F841
+            r1 = Rectangle(25, [1, 2, 3])  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(23, {"age": 23}) # noqa: F841
+            r1 = Rectangle(23, {"age": 23})  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(23, 54.5) # noqa: F841
+            r1 = Rectangle(23, 54.5)  # noqa: F841
 
         with self.assertRaises(TypeError):
-            r1 = Rectangle(25, (1, 2, 3)) # noqa: F841
+            r1 = Rectangle(25, (1, 2, 3))  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(0, 23) # noqa: F841
+            r1 = Rectangle(0, 23)  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(23, 0) # noqa: F841
+            r1 = Rectangle(23, 0)  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(-10, 23) # noqa: F841
+            r1 = Rectangle(-10, 23)  # noqa: F841
 
         with self.assertRaises(ValueError):
-            r1 = Rectangle(23, -10) # noqa: F841
+            r1 = Rectangle(23, -10)  # noqa: F841
 
     def test_x_y_valid_values_types(self):
         """

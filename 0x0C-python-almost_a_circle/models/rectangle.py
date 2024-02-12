@@ -21,7 +21,7 @@ class Rectangle(Base):
     def width(self):
         """Method to get a value to width"""
         return self.__width
-    
+
     @width.setter
     def width(self, value):
         """Method to set a value to width"""
@@ -35,7 +35,7 @@ class Rectangle(Base):
     def height(self):
         """Method to get a value to height"""
         return self.__height
-    
+
     @height.setter
     def height(self, value):
         """Method to set a value to height"""
@@ -49,7 +49,7 @@ class Rectangle(Base):
     def x(self):
         """Method to get a value to x"""
         return self.__x
-    
+
     @x.setter
     def x(self, value):
         """Method to set a value to x"""
@@ -63,7 +63,7 @@ class Rectangle(Base):
     def y(self):
         """Method to get a value to y"""
         return self.__y
-    
+
     @y.setter
     def y(self, value):
         """Method to set a value to  y"""
@@ -76,7 +76,7 @@ class Rectangle(Base):
     def area(self):
         """Calculate the area of a rectangle"""
         return self.width * self.height
-    
+
     def display(self):
         """Print the rectangle with the character #"""
         for _ in range(self.y):
@@ -89,7 +89,7 @@ class Rectangle(Base):
                 print("#", end="")
             print()
             i -= 1
-    
+
     def __str__(self):
         """String representation of a rectangle"""
         return "[Rectangle] ({:d}) {:d}/{:d} - {:d}/{:d}".format(self.id,
@@ -97,7 +97,7 @@ class Rectangle(Base):
                                                                  self.y,
                                                                  self.width,
                                                                  self.height)
-    
+
     def update(self, *args, **kwargs):
         """Update the instance of the object"""
         if args:

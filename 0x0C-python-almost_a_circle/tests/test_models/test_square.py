@@ -102,15 +102,29 @@ class TestSqureClass(unittest.TestCase):
         s.size = 10
         self.assertEqual(s.size, 10)
         with self.assertRaises(TypeError):
+            s.size = "1"
+        with self.assertRaises(TypeError):
             s.size = "9"
         with self.assertRaises(TypeError):
             s.size = [1, 2, 3]
+        with self.assertRaises(TypeError):
+            s = Square(1,  2, "3")
         with self.assertRaises(TypeError):
             s.size = {"age": 23}
         with self.assertRaises(ValueError):
             s.size = 0
         with self.assertRaises(ValueError):
             s.size = -100
+        with self.assertRaises(TypeError):
+            s = Square(1, "2")
+        with self.assertRaises(ValueError):
+            s = Square(-1)
+        with self.assertRaises(ValueError):
+            s = Square(1, -2)
+        with self.assertRaises(ValueError):
+            s = Square(1, 2, -3)
+        with self.assertRaises(ValueError):
+            s = Square(0)
 
     def test_update(self):
         """Test update function"""

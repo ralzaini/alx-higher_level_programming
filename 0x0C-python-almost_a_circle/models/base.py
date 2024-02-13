@@ -16,6 +16,7 @@ class Base:
 
     __nb_objects = 0
 
+
     def __init__(self, id=None):
         """base function"""
         if id is None:
@@ -92,12 +93,6 @@ class Base:
         else:
             return []
 
-    import csv
-import os
-
-class Base:
-    # ... other methods and properties ...
-
     @classmethod
     def save_to_file_csv(cls, list_objs):
         """Save a list of instances to a CSV file."""
@@ -105,12 +100,16 @@ class Base:
         from models.square import Square
 
         filename = f"{cls.__name__}.csv"
-        with open(filename, 'w', newline='', encoding='utf-8') as f:
+        with open(filename, 'w', encoding='utf-8') as f:
             writer = csv.writer(f)
             for obj in list_objs:
-                if type(obj).__name__ == "Rectangle":
-                    writer.writerow([obj.id, obj.width, obj.height, obj.x, obj.y])
-                elif type(obj).__name__ == "Square":
+                if isinstance(obj, Rectangle):
+                    writer.writerow([obj.id,
+                                    obj.width,
+                                    obj.height,
+                                    obj.x,
+                                    obj.y])
+                elif isinstance(obj, Square):
                     writer.writerow([obj.id, obj.size, obj.x, obj.y])
 
     @classmethod
@@ -118,7 +117,7 @@ class Base:
         """Load a list of instances from a CSV file."""
         from models.rectangle import Rectangle
         from models.square import Square
-        
+
         filename = f"{cls.__name__}.csv"
         if not os.path.exists(filename):
             return []
@@ -126,10 +125,9 @@ class Base:
         objs_list = []
         with open(filename, 'r', encoding='utf-8') as f:
             reader = csv.reader(f)
-            next(reader)  # Skip header row if present
             for row in reader:
-                if len(row) ==  5:  # Assuming Rectangle has  5 attributes
+                if cls.__name__ == "Rectangle":
                     objs_list.append(Rectangle(*row))
-                elif len(row) ==  4:  # Assuming Square has  4 attributes
+                elif cls.__name__ == "Square":
                     objs_list.append(Square(*row))
         return objs_list

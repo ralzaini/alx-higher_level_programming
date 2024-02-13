@@ -116,6 +116,8 @@ class TestSqureClass(unittest.TestCase):
         with self.assertRaises(ValueError):
             s.size = -100
         with self.assertRaises(TypeError):
+            s = Square("1")
+        with self.assertRaises(TypeError):
             s = Square(1, "2")
         with self.assertRaises(ValueError):
             s = Square(-1)
